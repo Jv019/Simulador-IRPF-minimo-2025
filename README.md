@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deloitte | Simulador IRPF Mínimo 2025</title>
     
-    <!-- Bibliotecas Externas (CDN) -->
+    <!-- Bibliotecas Externas -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -26,13 +26,17 @@
         .brand-dot { color: #86BC25; display: inline-block; width: 0.5em; }
 
         @media print {
-            body { background-color: white; -webkit-print-color-adjust: exact; }
+            body { background-color: white; -webkit-print-color-adjust: exact; margin: 0; padding: 0; }
             .no-print { display: none !important; }
             .print-only { display: block !important; }
-            .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+            .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; margin-bottom: 20px; }
             #main-container { max-width: 100%; margin: 0; padding: 0; }
-            header { border: none !important; }
-            .bg-black { background-color: white !important; color: black !important; border: 1px solid black; }
+            header { border: none !important; margin-bottom: 10px; }
+            footer { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 2px solid black; padding-top: 10px; z-index: 99; }
+            .page-content { margin-bottom: 120px; }
+            .bg-black { background-color: white !important; color: black !important; border: 2px solid black; }
+            .text-white { color: black !important; }
+            .bg-[#86BC25] { background-color: #ddd !important; color: black !important; }
         }
         .print-only { display: none; }
     </style>
@@ -44,31 +48,33 @@
         <div class="bg-white w-full max-w-3xl max-h-[90vh] overflow-y-auto border-t-[6px] border-[#86BC25] shadow-2xl">
             <div class="p-8 border-b sticky top-0 bg-white z-10 flex justify-between items-center">
                 <div>
-                    <h2 class="text-2xl font-bold text-black mb-1">Metodologia Legal</h2>
-                    <p class="text-sm text-gray-500">Base: Lei nº 15.270 de 26/11/2025</p>
+                    <h2 class="text-2xl font-bold text-black mb-1">Fundamentação Legal</h2>
+                    <p class="text-sm text-gray-500">Lei nº 15.270 de 26 de Novembro de 2025</p>
                 </div>
                 <button onclick="app.toggleDocs()" class="p-2 hover:bg-gray-100 rounded-full transition"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
             
-            <div class="p-8 space-y-6 text-sm text-gray-800 leading-relaxed">
+            <div class="p-8 space-y-6 text-sm text-gray-800 leading-relaxed font-serif">
                 <section>
-                    <h3 class="font-bold text-lg text-black mb-2 flex items-center gap-2">
+                    <h3 class="font-sans font-bold text-lg text-black mb-2 flex items-center gap-2">
                         <span class="w-2 h-2 bg-[#86BC25] rounded-full"></span> 
-                        1. Base de Cálculo Anual (Art. 16-A)
+                        1. Fórmula de Cálculo da Alíquota (Art. 16-A, § 2º, II)
                     </h3>
-                    <p class="text-gray-600 mb-2">A tributação mínima considera a <strong>soma anual</strong> de todos os rendimentos. Caso tenha renda variável (ex: 60k num mês, 40k no outro), insira o <strong>Total Anual</strong>.</p>
-                    <ul class="list-disc pl-5 space-y-1 text-gray-600">
-                        <li>Até R$ 600k/ano: <strong>Isento (0%)</strong></li>
-                        <li>R$ 600k a R$ 1.2M/ano: <strong>Fórmula (Renda / 60.000) - 10</strong></li>
-                        <li>Acima de R$ 1.2M/ano: <strong>Fixa em 10%</strong></li>
-                    </ul>
+                    <p class="text-gray-600 mb-2">Para rendimentos entre R$ 600.000,00 e R$ 1.200.000,00, a lei estabelece a seguinte fórmula linear:</p>
+                    <div class="bg-gray-100 p-4 border-l-4 border-black font-mono text-xs text-center font-bold">
+                        Alíquota % = (REND / 60.000) - 10
+                    </div>
+                    <p class="mt-2 text-gray-500 italic text-xs">Onde REND = total de rendimentos apurados no ano.</p>
                 </section>
+
                 <section>
-                    <h3 class="font-bold text-lg text-black mb-2 flex items-center gap-2">
+                    <h3 class="font-sans font-bold text-lg text-black mb-2 flex items-center gap-2">
                         <span class="w-2 h-2 bg-[#86BC25] rounded-full"></span> 
-                        2. Retenção Mensal (Art. 6-A)
+                        2. Retenção na Fonte sobre Dividendos (Art. 6º-A)
                     </h3>
-                    <p class="text-gray-600">A retenção de 10% é devida apenas nos meses onde o pagamento de dividendos superar R$ 50.000,00. O IRPF Mínimo (anual) desconta o que foi retido.</p>
+                    <p class="text-gray-600">
+                        "O pagamento... de lucros e dividendos... em montante superior a <strong>R$ 50.000,00 (cinquenta mil reais) em um mesmo mês</strong> fica sujeito à retenção na fonte... à alíquota de 10% sobre o <strong>total</strong> do valor pago."
+                    </p>
                 </section>
             </div>
             <div class="p-6 border-t bg-gray-50 flex justify-end">
@@ -78,25 +84,25 @@
     </div>
 
     <!-- MAIN CONTAINER -->
-    <div id="main-container" class="max-w-7xl mx-auto p-4 md:p-8 space-y-8">
+    <div id="main-container" class="max-w-7xl mx-auto p-4 md:p-8 space-y-8 page-content">
         
         <!-- HEADER -->
-        <header class="bg-white p-6 shadow-sm border-t-[6px] border-[#86BC25] flex flex-col md:flex-row justify-between items-center gap-6 print:border-0 print:shadow-none">
+        <header class="bg-white p-6 shadow-sm border-t-[6px] border-[#86BC25] flex flex-col md:flex-row justify-between items-center gap-6 print:shadow-none print:border-none">
             <div class="flex flex-col items-start">
                 <div class="brand-logo mb-2">
                     Deloitte<span class="text-[#86BC25]">.</span>
                 </div>
                 <h1 class="text-2xl font-bold text-black tracking-tight">Simulador de Tributação Mínima</h1>
                 <div class="flex items-center gap-2 text-sm font-medium text-gray-500 mt-1">
-                    <span class="bg-black text-white px-2 py-0.5 text-xs font-bold uppercase">Lei 15.270/2025</span>
-                    <span>Cálculo Mensal e Anual</span>
+                    <span class="bg-black text-white px-2 py-0.5 text-xs font-bold uppercase print:border print:border-black print:text-black print:bg-white">Lei 15.270/2025</span>
+                    <span>Compliance & Tax Calculation</span>
                 </div>
             </div>
             
             <div class="flex gap-3 no-print">
                 <button onclick="app.toggleDocs()" class="px-5 py-2 text-sm font-bold text-black bg-white border-2 border-gray-200 hover:border-[#86BC25] hover:text-[#86BC25] transition flex items-center gap-2">
-                    <i data-lucide="scale" class="w-4 h-4"></i>
-                    Regras
+                    <i data-lucide="book-open" class="w-4 h-4"></i>
+                    Ver Lei
                 </button>
                 <button onclick="window.print()" class="px-5 py-2 text-sm font-bold text-white bg-black hover:bg-[#86BC25] transition flex items-center gap-2 shadow-lg">
                     <i data-lucide="printer" class="w-4 h-4"></i>
@@ -105,16 +111,15 @@
             </div>
         </header>
 
-        <!-- HEADER IMPRESSÃO -->
-        <div class="print-only border-b-2 border-black pb-6 mb-8">
+        <!-- CABEÇALHO IMPRESSÃO -->
+        <div class="print-only border-b-2 border-black pb-4 mb-6">
             <div class="flex justify-between items-end">
                 <div>
-                    <div class="brand-logo text-2xl mb-4">Deloitte<span class="text-[#86BC25]">.</span></div>
-                    <h2 class="text-xl font-bold uppercase text-black">Relatório de Apuração IRPF Mínimo</h2>
+                    <h2 class="text-xl font-bold uppercase text-black">Papel de Trabalho: Apuração IRPF Mínimo</h2>
+                    <p class="text-sm text-gray-600">Referência: Ano-Calendário 2026</p>
                 </div>
-                <div class="text-right text-sm">
-                    <div class="mb-1"><strong>Contribuinte:</strong> <span id="print-taxpayer-name">N/A</span></div>
-                    <div><strong>Data:</strong> <span id="print-date"></span></div>
+                <div class="text-right text-sm font-mono">
+                    <div class="mb-1"><strong>Data de Emissão:</strong> <span id="print-date"></span></div>
                 </div>
             </div>
         </div>
@@ -129,13 +134,14 @@
                     <div class="p-5 border-b border-gray-200 bg-gray-50 flex justify-between items-center no-print">
                         <h2 class="font-bold text-black text-lg flex items-center gap-2">
                             <i data-lucide="user" class="w-5 h-5 text-[#86BC25]"></i>
-                            Identificação
+                            Identificação do Contribuinte
                         </h2>
                     </div>
+                    <div class="print-only px-5 pt-4 font-bold uppercase text-xs text-gray-500">Dados Cadastrais</div>
                     <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1.5">Nome do Contribuinte</label>
-                            <input type="text" id="input-taxpayer-name" oninput="app.updateTaxpayerInfo()" class="w-full p-2.5 bg-white border border-gray-300 focus:border-[#86BC25] outline-none transition text-sm text-black" placeholder="Nome Completo">
+                            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1.5">Nome Completo</label>
+                            <input type="text" id="input-taxpayer-name" oninput="app.updateTaxpayerInfo()" class="w-full p-2.5 bg-white border border-gray-300 focus:border-[#86BC25] outline-none transition text-sm text-black" placeholder="Nome do Contribuinte">
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1.5">CPF</label>
@@ -152,20 +158,33 @@
                                 <i data-lucide="layers" class="w-5 h-5 text-[#86BC25]"></i>
                                 Fontes de Renda
                             </h2>
-                            <p class="text-xs text-gray-500 mt-1">Utilize "Mensal" para projeções ou "Anual" para valores fechados.</p>
+                            <p class="text-xs text-gray-500 mt-1">Para dividendos variáveis, insira o total anual.</p>
                         </div>
                         <button onclick="app.addIncome()" class="text-white bg-black hover:bg-[#86BC25] text-xs font-bold uppercase tracking-wide px-4 py-2 transition shadow-lg flex items-center gap-2">
                             <i data-lucide="plus" class="w-3 h-3"></i> Adicionar
                         </button>
                     </div>
+                    
+                    <div class="print-only px-5 pt-4 font-bold uppercase text-xs text-gray-500 border-b border-gray-100 pb-2 mb-2">Detalhamento dos Rendimentos</div>
 
-                    <div id="incomes-list" class="p-5 space-y-6">
-                        <!-- Lista Dinâmica -->
-                    </div>
+                    <div id="incomes-list" class="p-5 space-y-6"></div>
                     
                     <div id="empty-state" class="hidden text-center py-16 bg-gray-50/50">
                         <h3 class="text-black font-bold">Nenhuma fonte lançada</h3>
                         <p class="text-gray-500 text-sm mt-1">Clique em "Adicionar" para iniciar.</p>
+                    </div>
+                </div>
+
+                <!-- Audit Log -->
+                <div class="bg-white shadow-md border border-gray-200 card">
+                    <div class="p-4 border-b border-gray-200 bg-black flex justify-between items-center">
+                        <h3 class="font-bold text-white text-xs uppercase tracking-widest flex items-center gap-2">
+                            <i data-lucide="file-code" class="w-4 h-4 text-[#86BC25]"></i>
+                            Audit Trail (Memória de Cálculo)
+                        </h3>
+                    </div>
+                    <div class="p-4 bg-gray-50 font-mono text-xs h-64 overflow-y-auto leading-relaxed border-l-4 border-black text-gray-700" id="audit-log">
+                        <!-- Logs automáticos da fórmula -->
                     </div>
                 </div>
             </div>
@@ -175,50 +194,47 @@
                 
                 <!-- Resultado Consolidado -->
                 <div class="bg-white p-8 shadow-xl border-t-4 border-black card relative">
-                    
                     <div class="flex justify-between items-start mb-6">
                         <h2 class="text-xl font-bold text-black flex items-center gap-2">
                             <i data-lucide="calculator" class="w-5 h-5 text-[#86BC25]"></i>
                             Resultado Consolidado
                         </h2>
-                        <span class="text-[10px] font-bold uppercase bg-gray-100 px-2 py-1 rounded text-gray-500">Ano-Calendário 2026</span>
+                        <span class="text-[10px] font-bold uppercase bg-gray-100 px-2 py-1 rounded text-gray-500 print:bg-white print:border print:border-gray-300">Base Lei 15.270</span>
                     </div>
 
                     <!-- Tabela de Valores -->
                     <div class="space-y-0 text-sm border border-gray-200 rounded-sm overflow-hidden">
-                        
-                        <!-- Cabeçalho da Tabela -->
-                        <div class="grid grid-cols-3 bg-gray-50 border-b border-gray-200 p-2 font-bold text-[10px] uppercase tracking-wide text-gray-500">
+                        <div class="grid grid-cols-3 bg-gray-50 border-b border-gray-200 p-2 font-bold text-[10px] uppercase tracking-wide text-gray-500 print:bg-white print:border-b-2 print:border-black">
                             <div class="col-span-1">Item</div>
                             <div class="col-span-1 text-right">Média Mensal</div>
                             <div class="col-span-1 text-right">Total Anual</div>
                         </div>
 
-                        <!-- Linha 1: Renda Total -->
+                        <!-- Linha 1: Renda -->
                         <div class="grid grid-cols-3 border-b border-gray-100 p-3 hover:bg-gray-50 transition">
                             <div class="col-span-1 font-semibold text-gray-700">Renda Total</div>
                             <div class="col-span-1 text-right text-gray-500" id="res-total-month">R$ 0,00</div>
                             <div class="col-span-1 text-right font-bold text-black" id="res-total-year">R$ 0,00</div>
                         </div>
 
-                        <!-- Linha 2: Base de Cálculo -->
+                        <!-- Linha 2: Base -->
                         <div class="grid grid-cols-3 border-b border-gray-100 p-3 hover:bg-gray-50 transition">
                             <div class="col-span-1 font-semibold text-gray-700">Base IRPF Mín.</div>
                             <div class="col-span-1 text-right text-gray-500" id="res-base-month">R$ 0,00</div>
                             <div class="col-span-1 text-right font-bold text-black" id="res-base-year">R$ 0,00</div>
                         </div>
 
-                        <!-- Linha 3: Imposto Devido (Calculado) -->
-                        <div class="grid grid-cols-3 border-b border-gray-100 p-3 bg-gray-50/50">
+                        <!-- Linha 3: Imposto Devido -->
+                        <div class="grid grid-cols-3 border-b border-gray-100 p-3 bg-gray-50/50 print:bg-white">
                             <div class="col-span-1 font-bold text-black flex flex-col">
                                 <span>Imposto Devido</span>
-                                <span class="text-[10px] font-normal text-gray-500">Alíquota: <span id="res-rate">0.00%</span></span>
+                                <span class="text-[10px] font-normal text-gray-500">Alíquota Calc: <span id="res-rate">0.00%</span></span>
                             </div>
                             <div class="col-span-1 text-right text-gray-500 font-medium" id="res-due-month">R$ 0,00</div>
                             <div class="col-span-1 text-right font-bold text-black" id="res-due-year">R$ 0,00</div>
                         </div>
 
-                        <!-- Linha 4: Imposto Pago (Input) -->
+                        <!-- Linha 4: Imposto Pago -->
                         <div class="grid grid-cols-3 p-3">
                             <div class="col-span-1 font-semibold text-gray-600">(-) Imposto Pago</div>
                             <div class="col-span-1 text-right text-gray-400" id="res-paid-month">-R$ 0,00</div>
@@ -226,23 +242,38 @@
                         </div>
                     </div>
 
-                    <!-- Caixa de Status Final -->
+                    <!-- Caixa de Status -->
                     <div id="status-box" class="mt-6 p-6 text-center transition-all bg-gray-50 border border-gray-200">
                         <span id="status-label" class="text-xs font-bold uppercase tracking-widest mb-2 block text-gray-400">Resultado Final</span>
                         <span id="status-value" class="text-3xl font-extrabold block text-black tracking-tight">R$ 0,00</span>
-                        <p id="status-desc" class="text-xs mt-3 text-gray-500">Preencha os valores para calcular.</p>
+                        <p id="status-desc" class="text-xs mt-3 text-gray-500">Aguardando dados.</p>
                     </div>
                 </div>
 
                 <!-- Gráfico -->
                 <div class="bg-white p-6 shadow-md border border-gray-200 card no-print">
-                    <h3 class="text-xs font-bold text-black uppercase tracking-widest mb-4 border-b pb-2">Comparativo: Devido vs Pago</h3>
-                    <div class="h-48">
-                        <canvas id="taxChart"></canvas>
-                    </div>
+                    <h3 class="text-xs font-bold text-black uppercase tracking-widest mb-4 border-b pb-2">Comparativo Visual</h3>
+                    <div class="h-48"><canvas id="taxChart"></canvas></div>
                 </div>
             </div>
         </div>
+
+        <!-- RODAPÉ DE IMPRESSÃO (Disclaimer) -->
+        <footer class="print-only fixed bottom-0 left-0 w-full bg-white border-t-2 border-black pt-4 pb-8 text-xs font-serif leading-tight px-8">
+            <div class="flex justify-between items-end mb-4">
+                <div>
+                    <p class="font-bold text-sm">Deloitte Touche Tohmatsu Limited</p>
+                    <p>Consultoria Tributária - IRPF High Income</p>
+                </div>
+                <div class="text-right">
+                    <p class="mb-6">___________________________________________________</p>
+                    <p class="font-bold">Assinatura do Responsável Técnico</p>
+                </div>
+            </div>
+            <p class="text-justify text-[10px] text-gray-600">
+                <strong>Termo de Responsabilidade:</strong> Este documento constitui um papel de trabalho auxiliar para fins de planejamento e compliance tributário, elaborado em conformidade com a Lei nº 15.270/2025. O cálculo da alíquota mínima segue o Art. 16-A § 2º (REND/60.000 - 10) e a retenção de dividendos observa o teto mensal de R$ 50.000,00 previsto no Art. 6º-A (incidência sobre o total). A exatidão do cálculo do redutor (Art. 16-B) depende da correta informação da alíquota efetiva da PJ. Este demonstrativo não substitui a Declaração de Ajuste Anual (DIRPF).
+            </p>
+        </footer>
 
         <!-- TEMPLATE ITEM -->
         <template id="income-template">
@@ -251,7 +282,7 @@
                     <i data-lucide="trash" class="w-4 h-4"></i>
                 </button>
 
-                <!-- Linha 1: Fonte, CNPJ e Natureza -->
+                <!-- Linha 1 -->
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-5 mb-4">
                     <div class="md:col-span-5">
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1.5">Fonte Pagadora</label>
@@ -275,7 +306,7 @@
                     </div>
                 </div>
 
-                <!-- Linha 2: Valores e Frequência -->
+                <!-- Linha 2 -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
                         <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1.5">Rendimento Bruto</label>
@@ -293,7 +324,11 @@
                     </div>
 
                     <div>
-                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1.5">Imposto Pago / Retido</label>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1.5">
+                            <span class="flex items-center justify-between w-full">Imposto Pago / Retido
+                                <button type="button" class="btn-suggest-tax text-[9px] text-[#86BC25] font-bold uppercase hover:underline ml-2 hidden">Sugerir (10%)</button>
+                            </span>
+                        </label>
                         <div class="relative">
                             <span class="absolute left-3 top-2.5 text-gray-400 text-sm font-medium">R$</span>
                             <input type="number" class="inp-tax w-full p-2.5 pl-9 border border-gray-200 focus:border-[#86BC25] outline-none text-sm font-mono font-bold text-black placeholder-gray-300" placeholder="0,00">
@@ -302,26 +337,27 @@
                     </div>
                 </div>
 
+                <!-- Alertas -->
                 <div class="alert-container mt-3">
                     <div class="alert-50k hidden flex items-start gap-2 bg-yellow-50 p-2 border border-yellow-200 text-[11px] text-yellow-800 mt-2">
                         <i data-lucide="alert-triangle" class="w-4 h-4 mt-0.5 shrink-0"></i>
-                        <span><strong>Compliance (Art. 6º-A):</strong> Média mensal excede R$ 50.000,00. Verificar retenção de 10%.</span>
+                        <span><strong>Compliance (Art. 6º-A):</strong> A média mensal excede R$ 50.000,00. Retenção de 10% deve incidir sobre o TOTAL.</span>
                     </div>
                 </div>
 
-                <!-- Redutor com Calculadora Auxiliar -->
+                <!-- Redutor com Helper -->
                 <div class="area-redutor hidden mt-4 pt-4 border-t border-gray-100 bg-gray-50/50 -mx-5 -mb-5 p-5">
                     <div class="flex items-center justify-between mb-3">
                         <div class="flex items-center gap-2">
                             <span class="bg-[#86BC25] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Art. 16-B</span>
                             <span class="text-xs font-bold text-black">Redutor de Dividendos</span>
                         </div>
-                        <button type="button" class="btn-calc-helper text-[10px] text-indigo-600 hover:underline flex items-center gap-1 font-bold">
+                        <button type="button" class="btn-calc-helper text-[10px] text-indigo-600 hover:underline flex items-center gap-1 font-bold no-print">
                             <i data-lucide="calculator" class="w-3 h-3"></i> Calcular Alíquota
                         </button>
                     </div>
                     
-                    <!-- Calculadora Helper (Toggle) -->
+                    <!-- Calculadora Helper -->
                     <div class="calc-helper hidden bg-white border border-indigo-100 p-3 mb-3 rounded shadow-sm">
                         <p class="text-[10px] font-bold text-gray-500 mb-2 uppercase">Calculadora de Alíquota Efetiva</p>
                         <div class="grid grid-cols-3 gap-2 mb-2">
@@ -338,7 +374,7 @@
                             <input type="number" step="0.0001" class="inp-corp-rate w-full p-2 border border-gray-300 text-xs text-center text-black font-mono focus:border-[#86BC25] outline-none" value="0.34">
                         </div>
                         <div>
-                            <label class="block text-[10px] text-gray-500 mb-1">Limite Setorial</label>
+                            <label class="block text-[10px] text-gray-500 mb-1">Limite Setorial (§1º)</label>
                             <select class="inp-corp-limit w-full p-2 border border-gray-300 text-xs bg-white text-black focus:border-[#86BC25] outline-none">
                                 <option value="0.34">34% (Geral)</option>
                                 <option value="0.40">40% (Seguros)</option>
@@ -351,6 +387,7 @@
         </template>
     </div>
 
+    <!-- LOGIC -->
     <script>
         const TAX_RULES = { MIN_THRESHOLD: 600000, MAX_THRESHOLD: 1200000, MAX_RATE: 0.10, DIVIDEND_RETENTION_MONTHLY_LIMIT: 50000 };
         const INCOME_CONFIG = {
@@ -373,8 +410,7 @@
 
             updateDate() {
                 const date = new Date().toLocaleDateString('pt-BR');
-                const el = document.getElementById('print-date');
-                if(el) el.textContent = date;
+                document.getElementById('print-date').textContent = date;
             },
 
             updateTaxpayerInfo() {
@@ -384,7 +420,10 @@
 
             addIncome() {
                 const id = Date.now();
-                this.data.push({ id, desc: '', cnpj: '', type: 'salary', val: 0, tax: 0, frequency: 'annual', corpRate: 0.34, corpLimit: 0.34, showRedutor: false });
+                this.data.push({ 
+                    id, desc: '', cnpj: '', type: 'salary', val: 0, tax: 0, 
+                    frequency: 'annual', corpRate: 0.34, corpLimit: 0.34, showRedutor: false 
+                });
                 this.renderList();
             },
 
@@ -428,17 +467,20 @@
                 
                 const areaRed = elItem.querySelector('.area-redutor');
                 const alert50k = elItem.querySelector('.alert-50k');
+                const btnSuggest = elItem.querySelector('.btn-suggest-tax');
                 
-                // Redutor visível apenas para dividendos
                 if (item.type === 'dividend') areaRed.classList.remove('hidden');
                 else areaRed.classList.add('hidden');
 
-                // Alerta 50k
                 const annualVal = item.frequency === 'monthly' ? item.val * 12 : item.val;
-                if (item.type === 'dividend' && annualVal > (TAX_RULES.DIVIDEND_RETENTION_MONTHLY_LIMIT * 12)) {
+                const monthlyVal = item.frequency === 'monthly' ? item.val : item.val / 12;
+
+                if (item.type === 'dividend' && monthlyVal > TAX_RULES.DIVIDEND_RETENTION_MONTHLY_LIMIT) {
                     alert50k.classList.remove('hidden');
+                    btnSuggest.classList.remove('hidden');
                 } else {
                     alert50k.classList.add('hidden');
+                    btnSuggest.classList.add('hidden');
                 }
             },
 
@@ -471,35 +513,43 @@
                         bind('.inp-corp-rate', 'corpRate');
                         
                         const elType = clone.querySelector('.inp-type');
-                        if (elType) {
+                        if(elType) {
                             elType.value = item.type;
                             elType.addEventListener('change', (e) => this.updateItem(item.id, 'type', e.target.value));
                         }
 
                         const elFreq = clone.querySelector('.inp-freq');
-                        if (elFreq) {
+                        if(elFreq) {
                             elFreq.value = item.frequency;
                             elFreq.addEventListener('change', (e) => this.updateItem(item.id, 'frequency', e.target.value));
                         }
 
                         const elLimit = clone.querySelector('.inp-corp-limit');
-                        if (elLimit) {
+                        if(elLimit) {
                             elLimit.value = item.corpLimit;
                             elLimit.addEventListener('change', (e) => this.updateItem(item.id, 'corpLimit', e.target.value));
                         }
 
                         const btnRemove = clone.querySelector('.btn-remove');
-                        if (btnRemove) btnRemove.onclick = () => this.removeIncome(item.id);
+                        if(btnRemove) btnRemove.onclick = () => this.removeIncome(item.id);
 
-                        // --- Lógica da Calculadora Auxiliar ---
+                        // Botão Sugerir Retenção
+                        const btnSuggest = clone.querySelector('.btn-suggest-tax');
+                        if(btnSuggest) {
+                            btnSuggest.onclick = () => {
+                                // Aplica 10% sobre o total
+                                const tax = item.val * 0.10;
+                                root.querySelector('.inp-tax').value = tax;
+                                this.updateItem(item.id, 'tax', tax);
+                            };
+                        }
+
+                        // Helpers
                         const btnHelper = clone.querySelector('.btn-calc-helper');
                         const calcHelper = clone.querySelector('.calc-helper');
                         const btnApply = clone.querySelector('.btn-apply-rate');
                         
-                        if(btnHelper) {
-                            btnHelper.onclick = () => calcHelper.classList.toggle('hidden');
-                        }
-                        
+                        if(btnHelper) btnHelper.onclick = () => calcHelper.classList.toggle('hidden');
                         if(btnApply) {
                             btnApply.onclick = () => {
                                 const profit = parseFloat(clone.querySelector('.hlp-profit').value) || 0;
@@ -507,25 +557,17 @@
                                 const csll = parseFloat(clone.querySelector('.hlp-csll').value) || 0;
                                 if(profit > 0) {
                                     const effective = (irpj + csll) / profit;
-                                    // Atualiza input principal e modelo de dados
-                                    const inputRate = root.querySelector('.inp-corp-rate');
-                                    inputRate.value = effective.toFixed(4);
+                                    root.querySelector('.inp-corp-rate').value = effective.toFixed(4);
                                     this.updateItem(item.id, 'corpRate', effective);
-                                    calcHelper.classList.add('hidden'); // Fecha helper
-                                } else {
-                                    alert("Lucro deve ser maior que zero.");
-                                }
+                                    calcHelper.classList.add('hidden');
+                                } else alert("Lucro deve ser positivo.");
                             };
                         }
 
-                        // Inicializa texto de prévia
                         const elPrev = clone.querySelector('.monthly-preview');
                         if(elPrev) {
-                            if (item.frequency === 'annual') {
-                                elPrev.textContent = `Média: ${(item.val/12).toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}/mês`;
-                            } else {
-                                elPrev.textContent = `Projeção Anual: ${(item.val*12).toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}`;
-                            }
+                            if (item.frequency === 'annual') elPrev.textContent = `Média: ${(item.val/12).toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}/mês`;
+                            else elPrev.textContent = `Projeção Anual: ${(item.val*12).toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}`;
                         }
 
                         container.appendChild(clone);
@@ -538,9 +580,13 @@
             },
 
             calculate() {
+                let logs = [];
                 let totalIncome = 0;
                 let minBase = 0;
                 let paidTax = 0;
+
+                const now = new Date().toLocaleTimeString();
+                logs.push(`[${now}] INICIANDO CÁLCULO LEI 15.270`);
 
                 this.data.forEach(item => {
                     const config = INCOME_CONFIG[item.type];
@@ -551,13 +597,25 @@
                     totalIncome += annualVal;
                     paidTax += annualTax;
                     
-                    if (config.include) minBase += annualVal;
+                    if (config.include) {
+                        minBase += annualVal;
+                        logs.push(`(+) BASE: R$ ${annualVal.toLocaleString('pt-BR')} (${item.desc || 'Fonte'})`);
+                    } else {
+                        logs.push(`(-) ISENTO: R$ ${annualVal.toLocaleString('pt-BR')} (${item.desc || 'Fonte'})`);
+                    }
                 });
 
                 let rate = 0;
-                if (minBase >= TAX_RULES.MAX_THRESHOLD) rate = TAX_RULES.MAX_RATE;
-                else if (minBase > TAX_RULES.MIN_THRESHOLD) {
-                    rate = ((minBase / 60000) - 10) / 100;
+                if (minBase >= TAX_RULES.MAX_THRESHOLD) {
+                    rate = TAX_RULES.MAX_RATE;
+                    logs.push(`> TETO: Base > 1.2M. Alíquota Fixa 10%`);
+                } else if (minBase > TAX_RULES.MIN_THRESHOLD) {
+                    // FÓRMULA EXATA DA LEI: (REND/60.000) - 10
+                    const formulaValue = (minBase / 60000) - 10;
+                    rate = formulaValue / 100;
+                    logs.push(`> PROGRESSIVA: (${minBase.toLocaleString('pt-BR')}/60k)-10 = ${formulaValue.toFixed(4)}%`);
+                } else {
+                    logs.push(`> ISENTO: Base < 600k.`);
                 }
 
                 const grossTax = minBase * rate;
@@ -569,7 +627,11 @@
                         const annualVal = item.val * multiplier;
                         
                         const load = item.corpRate + rate;
-                        if (load > item.corpLimit) totalReducer += annualVal * (load - item.corpLimit);
+                        if (load > item.corpLimit) {
+                            const credit = annualVal * (load - item.corpLimit);
+                            totalReducer += credit;
+                            logs.push(`> REDUTOR: Carga Total ${(load*100).toFixed(2)}% > Limite. Crédito: R$ ${credit.toFixed(2)}`);
+                        }
                     }
                 });
 
@@ -580,15 +642,11 @@
                 
                 document.getElementById('res-total-year').textContent = fmt(totalIncome);
                 document.getElementById('res-total-month').textContent = fmt(totalIncome/12);
-                
                 document.getElementById('res-base-year').textContent = fmt(minBase);
                 document.getElementById('res-base-month').textContent = fmt(minBase/12);
-                
-                document.getElementById('res-rate').textContent = (rate * 100).toFixed(2) + '%';
-                
+                document.getElementById('res-rate').textContent = (rate * 100).toFixed(4) + '%';
                 document.getElementById('res-due-year').textContent = fmt(taxDue);
                 document.getElementById('res-due-month').textContent = fmt(taxDue/12);
-                
                 document.getElementById('res-paid-year').textContent = '-' + fmt(paidTax);
                 document.getElementById('res-paid-month').textContent = '-' + fmt(paidTax/12);
 
@@ -618,8 +676,11 @@
                     lbl.className = "text-xs font-bold uppercase tracking-widest mb-2 block text-gray-400";
                     val.textContent = "R$ 0,00";
                     val.className = "text-3xl font-extrabold block text-gray-300";
-                    dsc.textContent = "Imposto pago é exatamente igual ao devido.";
+                    dsc.textContent = "Imposto pago igual ao devido.";
                 }
+
+                const logContainer = document.getElementById('audit-log');
+                logContainer.innerHTML = logs.map(l => `<div class="border-b border-gray-200 py-1.5 hover:bg-white px-2 transition">${l}</div>`).join('');
 
                 this.updateChart(paidTax, Math.max(0, balance), Math.abs(Math.min(0, balance)));
             },
